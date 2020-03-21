@@ -14,27 +14,40 @@ function CreateBongo()
 		self.y = self.y/2-self.tall/2
 
 		self.drums = {
-			[1] = {cooldown = 0, key = "s", active = false, offset = function(w, h) return w*0.3, h*0.1 end, sound = love.audio.newSource("assets/agogo_h.wav", "stream")},
-			[2] = {cooldown = 0, key = "d", active = false, offset = function(w, h) return w*0.75, h*0.2 end, sound = love.audio.newSource("assets/agogo_l.wav", "stream")},
-			[3] = {cooldown = 0, key = "x", active = false, offset = function(w, h) return w*0.45, h*0.45 end, sound = love.audio.newSource("assets/conga_h.wav", "stream")},
-			[4] = {cooldown = 0, key = "c", active = false, offset = function(w, h) return w*0.75, h*0.45 end, sound = love.audio.newSource("assets/bongo_l.wav", "stream")},
+			[1] = {cooldown = 0, key = "q", active = false, offset = function(w, h) return w*0.3, h*0.1 end, barPos = function(w, h) return w-40, (h*0.1) + ((h*0.05)*0.5) end, sound = love.audio.newSource("assets/agogo_h.wav", "stream")},
+			[2] = {cooldown = 0, key = "w", active = false, offset = function(w, h) return w*0.75, h*0.2 end, barPos = function(w, h) return w-40, (h*0.1) + ((h*0.05)*1.5) end, sound = love.audio.newSource("assets/agogo_l.wav", "stream")},
+			[3] = {cooldown = 0, key = "e", active = false, offset = function(w, h) return w*0.45, h*0.45 end, barPos = function(w, h) return w-40, (h*0.1) + ((h*0.05)*2.5) end, sound = love.audio.newSource("assets/conga_h.wav", "stream")},
+			[4] = {cooldown = 0, key = "r", active = false, offset = function(w, h) return w*0.75, h*0.45 end, barPos = function(w, h) return w-40, (h*0.1) + ((h*0.05)*3.5) end, sound = love.audio.newSource("assets/bongo_l.wav", "stream")},
 		}
 
 		hook.Add("think", "bongo", function()
 			self:Think()
 		end)
-		hook.Add("draw", "bongo", function()
+		hook.Add("drawBongo", "bongo", function()
 			self:Draw(self.x, self.y, self.wide, self.tall)
 		end)
 	end
 	
 	function BONGO:DrumPressed(index)
+		local w, h = love.graphics.getDimensions()
+
+		print("-----------------------")
+		print("DRUM PRESSED", index)
+		
 		local drum = self.drums[index]
 		drum.cooldown = love.timer.getTime()
 		drum.active = true
 
 		love.audio.setVolume(0.5)
 		drum.sound:play()
+
+		print("barpos", drum.barPos(w, h))
+		for k, v in pairs(ALLBEATS) do
+			print(k, v.x, v.y)
+			if v:InCollision(drum.barPos(w, h)) then
+				print("Collissions for", index)
+			end
+		end
 	end
 
 	function BONGO:Think()
@@ -65,6 +78,11 @@ function CreateBongo()
 				love.graphics.setColor(0.5, 0.1, 0.1)
 				love.graphics.rectangle("fill", x+offsetx, y+offsety, 20, 20)
 			end
+
+			local w, h = love.graphics.getDimensions()
+			local posx, posy = v.barPos(w, h)
+			love.graphics.setColor(0.1, 0.5, 0.1)
+			love.graphics.rectangle("fill", posx, posy, 5, 5)
 		end
 	end
 
@@ -95,7 +113,7 @@ function CreateBongo()
 	
 	function BONGO:Remove()
 		hook.Remove("think", "bongo")
-		hook.Remove("draw", "bongo")
+		hook.Remove("drawBongo", "bongo")
 		self = nil
 	end
 
