@@ -1,7 +1,10 @@
 -- Load libs
+require("beatmap")
 require("libs/hooks")
 require("classes/button")
 require("classes/bongo")
+require("classes/beat")
+require("classes/totem")
 require("scenes/menu")
 require("scenes/main")
 
@@ -10,6 +13,7 @@ require("scenes/main")
 -- Other
 GAME = {}
 GAME.scene = nil
+
 
 function love.load()
 	-- Set up frame
@@ -39,7 +43,10 @@ end
 local w, h = love.graphics.getDimensions()
 function love.draw()
 	w, h = love.graphics.getDimensions()
+	hook.Call("drawBackground", w, h)
 	hook.Call("draw", w, h)
+	hook.Call("drawTotem", w, h)
+	hook.Call("drawBongo", w, h)
 end
 
 function GetCurrentPressLocation()
@@ -52,7 +59,7 @@ function ChangeScene(scene)
 end
 
 local clickCursor = love.mouse.getSystemCursor("hand")
-hook.Add("think", "cursorClicker", function(w, h)
+hook.Add("think", "cursorClicker", function()
 	love.mouse.setCursor()
 	for k, v in pairs(ALLBUTTONS) do
 		if v.isHovered then
@@ -60,4 +67,11 @@ hook.Add("think", "cursorClicker", function(w, h)
 			break
 		end
 	end
+end)
+
+
+local backgroundTexture = love.graphics.newImage("assets/background.png")
+hook.Add("drawBackground", "main", function(w, h)
+	love.graphics.setColor(1, 1, 1)
+	love.graphics.draw(backgroundTexture, 0, 0, 0, w/backgroundTexture:getWidth(), h/backgroundTexture:getHeight())
 end)
