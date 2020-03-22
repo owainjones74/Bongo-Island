@@ -20,12 +20,13 @@ GAME.feedback = 0
 
 function love.load()
 	-- Set up frame
-	love.window.setMode(800, 800)
+	love.window.setMode(600, 600)
 	love.graphics.setBackgroundColor(0.1, 0.1, 0.1)
+	love.window.setTitle("Bongo Island")
 
 	-- Other stuff
---	ChangeScene("menu")
-	ChangeScene("main")
+	ChangeScene("menu")
+--	ChangeScene("main")
 
 end
 

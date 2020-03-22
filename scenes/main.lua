@@ -3,7 +3,7 @@ local totem1
 local totem2
 
 
-local feedbackFont = love.graphics.newFont("assets/bebas_neue.ttf", 40)
+local feedbackFont = love.graphics.newFont("assets/bebas_neue.ttf", 30)
 local music = love.audio.newSource("assets/music.wav", "stream")
 
 function getCurrentSongTime()
@@ -49,8 +49,8 @@ hook.Add("newScene", "mainScene", function(curScene, newScene)
 		music:play()
 
 		bongo = CreateBongo()
-		bongo:SetSize(500, 500)
-		bongo:SetPos(150, 420)
+		bongo:SetSize(400, 400)
+		bongo:SetPos(100, 320)
 
 		hook.Add("draw", "beatTimeline", function(w, h)
 			love.graphics.setFont(feedbackFont)
