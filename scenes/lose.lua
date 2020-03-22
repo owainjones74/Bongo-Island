@@ -1,10 +1,8 @@
 -- buttons
 local buttons = {}
-print("lose.lua")
 local headerFont = love.graphics.newFont("assets/bebas_neue.ttf", 50)
 local subheaderFont = love.graphics.newFont("assets/bebas_neue.ttf", 30)
 hook.Add("newScene", "loseScene", function(curScene, newScene)
-	print("Lose")
 	if curScene == "lose" then
 		for k, v in pairs(buttons) do
 			v:Remove()

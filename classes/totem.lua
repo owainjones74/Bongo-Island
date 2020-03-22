@@ -73,7 +73,6 @@ function CreateTotem()
 	end
 	
 	function TOTEM:Remove()
-		print("Removing totem")
 		hook.Remove("think", "totem"..self.id)
 		hook.Remove("drawTotem", "totem"..self.id)
 		ALLTOTEMS[self.id] = nil
