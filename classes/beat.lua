@@ -11,18 +11,19 @@ function CreateBeat()
 		id = id + 1
 		self.id = id
 
-		self.wide = 10
+		self.wide = 20
 		self.tall = 10
 		self.x, self.y = love.graphics.getDimensions()
 		self.x = self.x/2-self.wide/2
 		self.y = self.y/2-self.tall/2
 
-		self.color = {r = 0.2, g = 0.25, b = 1}
+		math.randomseed(os.time()) -- An attempt to prevent grey
+		self.color = {r = math.random(0.7, 0.9), g = math.random(0.5, 0.8), b = math.random(0.6, 0.8)}
 
 		hook.Add("think", "beat"..id, function()
 			self:Think()
 		end)
-		hook.Add("draw", "beat"..id, function()
+		hook.Add("drawBeats", "beat"..id, function()
 			self:Draw(self.x, self.y, self.wide, self.tall)
 		end)
 		ALLBEATS[id] = self
@@ -66,19 +67,16 @@ function CreateBeat()
 
 	function BEAT:InCollision(x, y)
 		-- x axis
-		if (x < self.x) then print("left") return false end -- Too far to the left
-		if (x > (self.x + self.wide)) then print("right") return false end -- Too far to the right
-		--y axis
-		if (y < self.y) then print("up") return false end -- Too high
-		if (y > (self.y + self.tall)) then print("down") return false end -- Too low
+		if (x < self.x) then return false end -- Too far to the left
+		if (x > (self.x + self.wide)) then return false end -- Too far to the right
 
 		return true -- Just right
 	end
 	
 	function BEAT:Remove()
 		hook.Remove("think", "beat"..self.id)
-		hook.Remove("draw", "beat"..self.id)
-		ALLBEATS[id] = nil
+		hook.Remove("drawBeats", "beat"..self.id)
+		ALLBEATS[self.id] = nil
 		self = nil
 	end
 

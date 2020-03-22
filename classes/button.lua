@@ -49,14 +49,21 @@ function CreateButton(func)
 	end
 	
 	function BUTTON:Draw(x, y, w, h)
-		love.graphics.setColor(self.color.r, self.color.g, self.color.b)
+--		love.graphics.setColor(self.color.r, self.color.g, self.color.b)
 		--love.graphics.rectangle("fill", x, y, w, h)
-		love.graphics.polygon("fill",
-			x+10, y,
-			x+w, y,
-			x+w, y+h,
-			x, y+h
-		)
+--		love.graphics.polygon("fill",
+--			x+10, y,
+--			x+w, y,
+--			x+w, y+h,
+--			x, y+h
+--		)
+		love.graphics.setColor(0.4, 0.4, 0.4, 0.9)
+		love.graphics.rectangle("fill", x, y, w, h)
+		love.graphics.setColor(1, 1, 1)
+		love.graphics.rectangle("fill", x, y, w, 5) -- Top bar
+		love.graphics.rectangle("fill", x, y+h-5, w, 5) -- Bottom bar
+		love.graphics.rectangle("fill", x, y, 5, h) -- Left bar
+		love.graphics.rectangle("fill", x+w, y, 5, h) -- Right bar
 	end
 	function BUTTON:DrawText(x, y, w, h)
 		love.graphics.setFont(buttonFont)
@@ -102,10 +109,9 @@ function CreateButton(func)
 	end
 	
 	function BUTTON:Remove()
-		print("Removing button")
 		hook.Remove("think", "button"..self.id)
 		hook.Remove("draw", "button"..self.id)
-		ALLBUTTONS[id] = nil
+		ALLBUTTONS[self.id] = nil
 		self = nil
 	end
 

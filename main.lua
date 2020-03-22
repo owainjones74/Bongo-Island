@@ -5,15 +5,18 @@ require("classes/button")
 require("classes/bongo")
 require("classes/beat")
 require("classes/totem")
+require("classes/note")
 require("scenes/menu")
 require("scenes/main")
+require("scenes/lose")
+require("scenes/win")
 
 -- cache
 
 -- Other
 GAME = {}
 GAME.scene = nil
-
+GAME.feedback = 0
 
 function love.load()
 	-- Set up frame
@@ -23,6 +26,7 @@ function love.load()
 	-- Other stuff
 --	ChangeScene("menu")
 	ChangeScene("main")
+
 end
 
 -- Limit the think logic, although it probably won't matter in this game
@@ -44,9 +48,11 @@ local w, h = love.graphics.getDimensions()
 function love.draw()
 	w, h = love.graphics.getDimensions()
 	hook.Call("drawBackground", w, h)
-	hook.Call("draw", w, h)
 	hook.Call("drawTotem", w, h)
 	hook.Call("drawBongo", w, h)
+	hook.Call("drawNotes", w, h)
+	hook.Call("draw", w, h)
+	hook.Call("drawBeats", w, h)
 end
 
 function GetCurrentPressLocation()

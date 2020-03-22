@@ -1,6 +1,8 @@
 -- Cache
 local id = 0
 ALLTOTEMS = {}
+local totemHappyTexture = love.graphics.newImage("assets/totem_happy.png")
+local totemAngryTexture = love.graphics.newImage("assets/totem_angry.png")
 
 -- Create the button
 function CreateTotem()
@@ -10,8 +12,8 @@ function CreateTotem()
 		id = id + 1
 		self.id = id
 
-		self.wide = 200
-		self.tall = 200
+		self.wide = 300
+		self.tall = 300
 		self.x, self.y = love.graphics.getDimensions()
 		self.x = self.x/2-self.wide/2
 		self.y = self.y/2-self.tall/2
@@ -34,8 +36,8 @@ function CreateTotem()
 	end
 	
 	function TOTEM:Draw(x, y, w, h)
-		love.graphics.setColor(self.color.r, self.color.g, self.color.b)
-		love.graphics.rectangle("fill", x, y, w, h)
+		love.graphics.setColor(1, 1, 1)
+		love.graphics.draw((GAME.feedback >= 0) and totemHappyTexture or totemAngryTexture, self.x, self.y, (GAME.feedback >= 0) and (math.sin(getCurrentSongTime())*0.2) or 0, self.wide/totemHappyTexture:getWidth(), self.tall/totemHappyTexture:getHeight(), totemHappyTexture:getWidth()/2, totemHappyTexture:getHeight()*0.85)
 	end
 
 	function TOTEM:SetSize(w, h)
@@ -71,10 +73,10 @@ function CreateTotem()
 	end
 	
 	function TOTEM:Remove()
-		print("Removing button")
-		hook.Remove("think", "button"..self.id)
-		hook.Remove("drawTotem", "button"..self.id)
-		ALLTOTEMS[id] = nil
+		print("Removing totem")
+		hook.Remove("think", "totem"..self.id)
+		hook.Remove("drawTotem", "totem"..self.id)
+		ALLTOTEMS[self.id] = nil
 		self = nil
 	end
 
